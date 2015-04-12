@@ -1,0 +1,21 @@
+machine:
+  services:
+    - docker
+
+dependencies:
+  override:
+    - docker build -t "$(cat repo_name.txt):$(git describe --tags)" .
+
+  cache_directories:
+    - "~/docker"
+
+test:
+  override:
+    - echo "Gotta test the image somehow at some point"
+
+deployment:
+  production:
+    branch: master
+    commands:
+    - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD -e $DOCKER_EMAIL
+    - docker push "$(cat repo_name.txt):$(git describe --tags)"
