@@ -1,6 +1,13 @@
 #!/bin/bash
 # Starts up postgresql within the container.
 
+# Fix perm error on aufs (has to be started here, not in Dockerfile)
+sh /etc/my_init.d/00_fix_aufs.sh
+
+# fix stats dirs
+mkdir -p /var/run/postgresql/9.4-main.pg_stat_tmp
+chown postgres:postgres /var/run/postgresql/9.4-main.pg_stat_tmp
+
 # Stop on error
 set -e
 
