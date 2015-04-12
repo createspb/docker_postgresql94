@@ -37,6 +37,10 @@ RUN touch /firstrun
 RUN mkdir /etc/service/postgresql
 RUN ln -s /scripts/start.sh /etc/service/postgresql/run
 
+# hack for 'snakeoil' cert problem
+# https://github.com/docker/docker/issues/783#issuecomment-56013588
+RUN mkdir /etc/ssl/private-copy; mv /etc/ssl/private/* /etc/ssl/private-copy/; rm -r /etc/ssl/private; mv /etc/ssl/private-copy /etc/ssl/private; chmod -R 0700 /etc/ssl/private; chown -R postgres /etc/ssl/private
+
 # Expose our data, log, and configuration directories.
 VOLUME ["/data", "/var/log/postgresql", "/etc/postgresql"]
 
